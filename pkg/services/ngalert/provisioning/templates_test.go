@@ -62,7 +62,7 @@ func TestTemplateService(t *testing.T) {
 
 			_, err := sut.GetTemplates(context.Background(), 1)
 
-			require.ErrorContains(t, err, "failed to deserialize")
+			require.Truef(t, ErrBadAlertmanagerConfiguration.Base.Is(err), "expected ErrBadAlertmanagerConfiguration but got %s", err.Error())
 		})
 
 		t.Run("when no AM config in current org", func(t *testing.T) {
@@ -73,7 +73,7 @@ func TestTemplateService(t *testing.T) {
 
 			_, err := sut.GetTemplates(context.Background(), 1)
 
-			require.ErrorContains(t, err, "no alertmanager configuration")
+			require.Truef(t, ErrNoAlertmanagerConfiguration.Is(err), "expected ErrNoAlertmanagerConfiguration but got %s", err.Error())
 		})
 	})
 
@@ -113,7 +113,7 @@ func TestTemplateService(t *testing.T) {
 
 				_, err := sut.SetTemplate(context.Background(), 1, tmpl)
 
-				require.ErrorContains(t, err, "failed to deserialize")
+				require.Truef(t, ErrBadAlertmanagerConfiguration.Base.Is(err), "expected ErrBadAlertmanagerConfiguration but got %s", err.Error())
 			})
 
 			t.Run("when no AM config in current org", func(t *testing.T) {
@@ -125,7 +125,7 @@ func TestTemplateService(t *testing.T) {
 
 				_, err := sut.SetTemplate(context.Background(), 1, tmpl)
 
-				require.ErrorContains(t, err, "no alertmanager configuration")
+				require.Truef(t, ErrNoAlertmanagerConfiguration.Is(err), "expected ErrNoAlertmanagerConfiguration but got %s", err.Error())
 			})
 
 			t.Run("when provenance fails to save", func(t *testing.T) {
@@ -289,7 +289,7 @@ func TestTemplateService(t *testing.T) {
 
 				err := sut.DeleteTemplate(context.Background(), 1, "template")
 
-				require.ErrorContains(t, err, "failed to deserialize")
+				require.Truef(t, ErrBadAlertmanagerConfiguration.Base.Is(err), "expected ErrBadAlertmanagerConfiguration but got %s", err.Error())
 			})
 
 			t.Run("when no AM config in current org", func(t *testing.T) {
@@ -300,7 +300,7 @@ func TestTemplateService(t *testing.T) {
 
 				err := sut.DeleteTemplate(context.Background(), 1, "template")
 
-				require.ErrorContains(t, err, "no alertmanager configuration")
+				require.Truef(t, ErrNoAlertmanagerConfiguration.Is(err), "expected ErrNoAlertmanagerConfiguration but got %s", err.Error())
 			})
 
 			t.Run("when provenance fails to save", func(t *testing.T) {
